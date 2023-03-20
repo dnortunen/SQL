@@ -1,0 +1,53 @@
+/* Create table about the people and what they do here */
+CREATE TABLE famous_people (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    full_name TEXT,
+    tv_show TEXT);
+    
+INSERT INTO famous_people (full_name, tv_show) VALUES ("Joe Montana","NFL");
+INSERT INTO famous_people (full_name, tv_show) VALUES ("Alice","Alice");
+INSERT INTO famous_people (full_name, tv_show) VALUES ("Joey Tribioni","Friends");
+INSERT INTO famous_people (full_name, tv_show) VALUES ("Robin Williams","Mork and Mindy");
+INSERT INTO famous_people (full_name, tv_show) VALUES ("Charlie Sheen","Two and a Half Men");
+
+
+SELECT * from famous_people;
+
+CREATE TABLE hobbies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    people_id INTEGER,
+    hobby TEXT);
+
+INSERT INTO hobbies (people_id, hobby) VALUES (1,"Soccer Player");
+INSERT INTO hobbies (people_id, hobby) VALUES (2,"Waitress");
+INSERT INTO hobbies (people_id, hobby) VALUES (3,"Doctor");
+INSERT INTO hobbies (people_id, hobby) VALUES (3,"Womanizer");
+INSERT INTO hobbies (people_id, hobby) VALUES (4,"Comedian");
+INSERT INTO hobbies (people_id, hobby) VALUES (5,"Partier");
+INSERT INTO hobbies (people_id, hobby) VALUES (5,"Alcoholic");
+
+
+CREATE TABLE side_chicks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    full_name TEXT);
+    
+INSERT INTO side_chicks (person_id, full_name) VALUES (3,"Courtney Cox");
+INSERT INTO side_chicks (person_id, full_name) VALUES (5,"Marin Hinkle");
+
+SELECT * FROM side_chicks;
+
+SELECT p.full_name, h.hobby FROM famous_people p
+    JOIN hobbies h ON p.id = h.people_id;
+    
+SELECT p.full_name Actor, s.full_name "Side Chick" FROM famous_people p
+    JOIN side_chicks s ON p.id = s.person_id;
+    
+SELECT p.full_name Actor, h.hobby Hobby, s.full_name "Side Chick" FROM famous_people p
+    JOIN hobbies h ON p.id = h.people_id
+    JOIN side_chicks s ON p.id = s.person_id;
+
+SELECT p.full_name Actor, h.hobby Hobby, s.full_name "Side Chick" FROM famous_people p
+    JOIN hobbies h ON p.id = h.people_id
+    LEFT OUTER JOIN side_chicks s ON p.id = s.person_id;
+    
