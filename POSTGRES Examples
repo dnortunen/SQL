@@ -1,0 +1,80 @@
+-- Example query (PostgreSQL)
+-- PostgreSQL is stupid and requires the database and the table name to be in double quotes ""
+SELECT * FROM "CharlotteChaze/BreakIntoTech"."netflix_people";
+
+-- Tips:
+-- (*) Table names containing punctuation, capitalization, or spaces should be
+--     quoted, e.g. "Test Data.csv".
+-- (*) Add more data by using the Upload Data button.
+-- (*) Create additional schemas for namespacing your tables, e.g. "CREATE SCHEMA my_schema;".
+-- (*) When querying tables created outside of the public (default) schema,
+--     be sure to specify the desired schema, e.g. "SELECT * FROM my_schema."my data.csv";".
+
+--In this SQL code, I'm querying a database that's holding Nexflix data to answer questions about the data. 
+
+SELECT 
+    people.show_id,
+    people.director, 
+    people.cast, 
+    titles.type, 
+    titles.title 
+FROM "CharlotteChaze/BreakIntoTech"."netflix_people" people
+LEFT JOIN "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles 
+ON people.show_id = titles.show_id; 
+
+
+SELECT DISTINCT titles.title
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+WHERE titles.type = 'Movie'
+ORDER BY titles.title;
+
+--#1. How many movie titles are there in the database? (movies only, not tv shows) 
+SELECT  count(titles.title)
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+WHERE titles.type = 'Movie';
+
+--#2. When was the most recent batch of tv shows and/or movies added to the database? 
+SELECT max(date(titles.date_added))
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+GROUP BY titles.date_added
+ORDER by titles.date_added;
+
+--#3. List all the movies and tv shows in alphabetical order. 
+SELECT titles.title
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+ORDER by titles.title ASC; --ascending order
+
+--#4. Who was the Director for the movie Bright Star? 
+SELECT people.director,
+    titles.title
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+JOIN "CharlotteChaze/BreakIntoTech"."netflix_people" people 
+ON titles.show_id = people.show_id
+WHERE titles.title = 'Bright Star';
+
+--#5. What is the oldest movie in the database and what year was it made?
+-- attempt 1. oldest being first entered in datbase
+SELECT min(titles.date_added),
+    titles.title,
+    titles.release_year
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+WHERE titles.type = 'Movie'
+GROUP BY titles.date_added,
+    titles.title,
+    titles.release_year
+ORDER BY titles.date_added
+LIMIT 1;
+
+
+SELECT min(titles.date_added)
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles;
+
+
+--#5. What is the oldest movie in the database and what year was it made? 
+--attempt 2. oldest being release date
+SELECT release_year,
+    title
+FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info" titles
+WHERE type = 'Movie'
+ORDER BY release_year ASC
+LIMIT 1;
