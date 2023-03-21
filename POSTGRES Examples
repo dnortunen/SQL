@@ -92,5 +92,4 @@ AND release_year <=
 (SELECT MIN(release_year) 
 FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
 WHERE type = 'Movie'); 
-# We will learn subqueries in the next section, so don't worry -
-# this isn't supposed to make sense yet! 
+ 
